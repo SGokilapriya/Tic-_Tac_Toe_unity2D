@@ -36,13 +36,38 @@ public class GameController : MonoBehaviour
     public PlayerColor inactivePlayerColor;
     public GameObject startInfo;
 
+    private string computerSide;
+    public bool playerMove;
+    public float delay;
+    private int value;
+
     void Awake()
     {
         gameOverPanel.SetActive(false);
         SetGameControllerReferenceOnButtons();
         moveCount = 0;
         restartButton.SetActive(false);
+        playerMove = true;
     }
+
+    void Update()
+    {
+        if (playerMove == false)
+        {
+            delay += delay * Time.deltaTime;
+            if (delay >= 100)
+            {
+                value = Random.Range(0, buttonList.Length);
+                if (buttonList[value].GetComponentInParent<Button>().interactable == true)
+                {
+                    buttonList[value].text = GetComputerSide();
+                    buttonList[value].GetComponentInParent<Button>().interactable = false;
+                    EndTurn();
+                }
+            }
+        }
+    }
+
     void SetGameControllerReferenceOnButtons()
     {
         for (int i = 0; i < buttonList.Length; i++)
@@ -57,10 +82,12 @@ public class GameController : MonoBehaviour
         playerSide = startingSide;
         if (playerSide == "X")
         {
+            computerSide = "O";
             SetPlayerColors(playerX, playerO);
         }
         else
         {
+            computerSide = "X";
             SetPlayerColors(playerO, playerX);
         }
         StartGame();
@@ -78,34 +105,80 @@ public class GameController : MonoBehaviour
         return playerSide;
     }
 
+    public string GetComputerSide()
+    {
+        return computerSide;
+    }
+
     public void EndTurn()
     {
         moveCount++;
 
-        for (int i = 0; i < buttonList.Length; i = i + 3)
-        {
-            if (buttonList[i].text == playerSide && buttonList[i + 1].text == playerSide && buttonList[i + 2].text == playerSide)
-            {
-                GameOver(playerSide);
-            }
-        }
-
-        for (int i = 0; i < 3; i++)
-        {
-            if (buttonList[i].text == playerSide && buttonList[i + 3].text == playerSide && buttonList[i + 6].text == playerSide)
-            {
-                GameOver(playerSide);
-            }
-        }
-
-        if (buttonList[0].text == playerSide && buttonList[4].text == playerSide && buttonList[8].text == playerSide)
+        if (buttonList[0].text == playerSide && buttonList[1].text == playerSide && buttonList[2].text == playerSide)
         {
             GameOver(playerSide);
         }
-
+        else if (buttonList[3].text == playerSide && buttonList[4].text == playerSide && buttonList[5].text == playerSide)
+        {
+            GameOver(playerSide);
+        }
+        else if (buttonList[6].text == playerSide && buttonList[7].text == playerSide && buttonList[8].text == playerSide)
+        {
+            GameOver(playerSide);
+        }
+        else if (buttonList[0].text == playerSide && buttonList[3].text == playerSide && buttonList[6].text == playerSide)
+        {
+            GameOver(playerSide);
+        }
+        else if (buttonList[1].text == playerSide && buttonList[4].text == playerSide && buttonList[7].text == playerSide)
+        {
+            GameOver(playerSide);
+        }
+        else if (buttonList[2].text == playerSide && buttonList[5].text == playerSide && buttonList[8].text == playerSide)
+        {
+            GameOver(playerSide);
+        }
+        else if (buttonList[0].text == playerSide && buttonList[4].text == playerSide && buttonList[8].text == playerSide)
+        {
+            GameOver(playerSide);
+        }
         else if (buttonList[2].text == playerSide && buttonList[4].text == playerSide && buttonList[6].text == playerSide)
         {
             GameOver(playerSide);
+        }
+
+
+        else if (buttonList[0].text == computerSide && buttonList[1].text == computerSide && buttonList[2].text == computerSide)
+        {
+            GameOver(computerSide);
+        }
+        else if (buttonList[3].text == computerSide && buttonList[4].text == computerSide && buttonList[5].text == computerSide)
+        {
+            GameOver(computerSide);
+        }
+        else if (buttonList[6].text == computerSide && buttonList[7].text == computerSide && buttonList[8].text == computerSide)
+        {
+            GameOver(computerSide);
+        }
+        else if (buttonList[0].text == computerSide && buttonList[3].text == computerSide && buttonList[6].text == computerSide)
+        {
+            GameOver(computerSide);
+        }
+        else if (buttonList[1].text == computerSide && buttonList[4].text == computerSide && buttonList[7].text == computerSide)
+        {
+            GameOver(computerSide);
+        }
+        else if (buttonList[2].text == computerSide && buttonList[5].text == computerSide && buttonList[8].text == computerSide)
+        {
+            GameOver(computerSide);
+        }
+        else if (buttonList[0].text == computerSide && buttonList[4].text == computerSide && buttonList[8].text == computerSide)
+        {
+            GameOver(computerSide);
+        }
+        else if (buttonList[2].text == computerSide && buttonList[4].text == computerSide && buttonList[6].text == computerSide)
+        {
+            GameOver(computerSide);
         }
         else if (moveCount >= 9)
         {
@@ -144,8 +217,10 @@ public class GameController : MonoBehaviour
 
     void ChangeSides()
     {
-        playerSide = (playerSide == "X") ? "O" : "X";
-        if (playerSide == "X")
+        //playerSide = (playerSide == "X") ? "O" : "X";
+        playerMove = (playerMove == true) ? false : true;
+        //if (playerSide == "X")
+        if(playerMove == true)
         {
             SetPlayerColors(playerX, playerO);
         }
@@ -169,6 +244,8 @@ public class GameController : MonoBehaviour
         SetPlayerButtons(true);
         SetPlayerColorsInactive();
         startInfo.SetActive(true);
+        playerMove = true;
+        delay = 10;
 
         for (int i = 0; i < buttonList.Length; i++)
         {
