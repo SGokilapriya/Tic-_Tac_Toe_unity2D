@@ -1,4 +1,4 @@
 # Tic-Tac-Toe-game-unity
 
-Added TicTacToe game
+Created a Tic Tac Toe game in unity using 2D GameObjects.
  
